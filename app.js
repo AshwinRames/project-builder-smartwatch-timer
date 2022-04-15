@@ -1,150 +1,160 @@
-var updateTime = setInterval(showTimeDay, 1000);
-
-//showing time and day
-function showTimeDay() {
-  var today = new Date();
-  var time = today.getHours() + ":" + today.getMinutes();
-
-  document.getElementById("topTime").innerHTML = time;
-
-  document.getElementById("time").innerHTML = time;
-
-  var weekDays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  document.getElementById("day").innerHTML = weekDays[today.getDay()];
+var everyday = new Date();
+var hrs = everyday.getHours();
+if(hrs<10){
+    hrs=`0${hrs}`;
 }
-
-let message = document.getElementById("messageDisplay");
-let innerMsg = document.getElementById("innermessage");
-let hr = document.createElement("hr");
-var msg = document.createElement("p");
-
-function showMessage() {
-  document.getElementById("timeDisplay").style.display = "none";
-  document.getElementById("musicDisplay").style.display = "none";
-  document.getElementById("messageDisplay").style.display = "block";
-  document.getElementById("music").style.color = "gray";
-  document.getElementById("clock").style.color = "gray";
-  document.getElementById("message").style.color = "white";
+var min = everyday.getMinutes();
+if(min<10){
+    min=`0${min}`;
 }
-function showJavaMsg() {
-  document.getElementById("btnMessage").disabled = true;
-  document.getElementById("btnMusic").disabled = true;
-  message.style.display = "none";
-  innerMsg.style.display = "block";
-  msg.innerText =
-    "Java is high-level programming language developed by sun Microsystems";
-  innerMsg.appendChild(msg);
-  innerMsg.appendChild(hr);
-}
-function showHtmlMsg() {
-  msg.innerText = "";
-  document.getElementById("btnMessage").disabled = true;
-  document.getElementById("btnMusic").disabled = true;
-  message.style.display = "none";
-  innerMsg.style.display = "block";
-  msg.innerText =
-    "HTML stands for Hyper Text Markup Language. HTML describes the structure of a Web page.";
-  innerMsg.appendChild(msg);
-  innerMsg.appendChild(hr);
-}
-function showCssMsg() {
-  msg.innerText = "";
-  document.getElementById("btnMessage").disabled = true;
-  document.getElementById("btnMusic").disabled = true;
-  message.style.display = "none";
-  innerMsg.style.display = "block";
-  msg.innerText = "Css is a cascading style sheet used for styling purpose.";
-  innerMsg.appendChild(msg);
-  innerMsg.appendChild(hr);
-}
-function showWatch() {
-  msg.innerText = "";
-  document.getElementById("btnMessage").disabled = false;
-  document.getElementById("btnMusic").disabled = false;
-  document.getElementById("messageDisplay").style.display = "none";
-  document.getElementById("musicDisplay").style.display = "none";
+var time = hrs + " : " + min;
+document.getElementById('firsttime').innerHTML = time;
 
-  innerMsg.style.display = "none";
-  document.getElementById("timeDisplay").style.display = "block";
-  showTimeDay();
-  document.getElementById("music").style.color = "white";
-  document.getElementById("clock").style.color = "white";
-  document.getElementById("message").style.color = "white";
-}
+let previous = document.querySelector('#pre');
+let play = document.querySelector('#play');
+let next = document.querySelector('#next');
+let title = document.querySelector('#title');
+let slider = document.querySelector('#duration_slider');
+let curr_time = document.querySelector(".current_time");
+let total_duration = document.querySelector(".total_duration");
+let track_image = document.querySelector('#track_image');
+let present = document.querySelector('#present');
+let total = document.querySelector('#total');
+let artist = document.querySelector('#artist');
 
-var tracks = [
-  {
-    id: "1",
-    name: "Trip",
-    trackSrc:"assests/trip.mp3",
-    artist: "Ella Mai",
-    imgSrc: "https://i.ytimg.com/vi/uHDO2aqY5mc/maxresdefault.jpg",
-
-    id: "2",
-    name: "Ocean",
-    trackSrc: "assests/ocean.mp3",
-    artist: "Khalid",
-    imgSrc: "https://images.genius.com/aa371867dc335167a703b247759c115a.619x273x1.jpg",
-  },
-  {
-    id: "3",
-    name: "Kannulo Unnavu",
-    trackSrc: "assests/Kannulo Unnavu [TeluguwapZone.Com].mp3",
-    artist: "Hariharan,Saindhavi",
-    imgSrc: "https://i.ytimg.com/vi/oE1sxXPNbrI/maxresdefault.jpg",
-  },
- 
+let timer;
+let index_no = 0;
+let Playing_song = false;
+let track = document.createElement('audio');
+let All_song = [
+   {
+     name: "Doctor Theme",
+     path: "Doctor Theme.mp3",
+     img: "Doctor Theme.jpg",
+     singer: "Anirudh Ravichander"
+   },
+   {
+     name: "JD BadAss",
+     path: "JD Badass Theme.mp3",
+     img: "JD.jpg",
+     singer: "Anirudh"
+   },
+   {
+     name: "JD Intro",
+     path: "JD Intro.mp3",
+     img: "JD.jpg",
+     singer: "Arivu"
+   },
+   {
+     name: "Master The Blaster ",
+     path: "Master The Blaster.mp3",
+     img: "JD.jpg",
+     singer: "Bjourn Surrao"
+   },
+   {
+     name: "Rait Zara Si",
+     path: "Rait Zara Si.mp3",
+     img: "Rait Zara Si.jpg",
+     singer: "Arijit Singh"
+   }
 ];
-function playMusic() {
-  document.getElementById("timeDisplay").style.display = "none";
-  document.getElementById("messageDisplay").style.display = "none";
-  document.getElementById("musicDisplay").style.display = "block";
-  document.getElementById("message").style.color = "gray";
-  document.getElementById("clock").style.color = "gray";
-  document.getElementById("music").style.color = "white";
+
+function load_track(index_no){
+	clearInterval(timer);
+	reset_slider();
+
+	track.src = All_song[index_no].path;
+	title.innerHTML = All_song[index_no].name;	
+	track_image.src = All_song[index_no].img;
+    artist.innerHTML = All_song[index_no].singer;
+    track.load();
+
+	timer = setInterval(range_slider ,1000);
+	track.addEventListener("ended",next_song);
 }
 
-let play = document.getElementById("play-pause");
-let ol = document.getElementById("orderList");
+load_track(index_no);
 
-tracks.forEach((track) => {
-  let li = document.createElement("li");
-  var audio = document.querySelector("audio");
-  li.innerHTML =
-    track.id + " . " + track.name + "<span>- " + track.artist + "</span>";
-  var img = document.getElementById("songimg");
+ function justplay(){
+ 	if(Playing_song==false){
+ 		playsong();
 
-  li.onclick = function () {
-    var trackname = document.getElementById("trackname");
-    trackname.innerText = track.name;
+ 	}else{
+ 		pausesong();
+ 	}
+ }
 
-    img.setAttribute("src", track.imgSrc);
 
-    audio.pause();
-    audio.setAttribute("src", track.trackSrc);
-    audio.load();
-    audio.play();
-    play.innerHTML = "Pause";
-  };
+// reset song slider
+ function reset_slider(){
+		curr_time.textContent = "00:00";
+		total_duration.textContent = "00:00";
+ 	    slider.value = 0;
+ }
 
-  ol.appendChild(li);
-});
-//changing state of button
-function playtrack() {
-  let audio = document.querySelector("audio");
-  if (audio.paused) {
-    play.innerHTML = "Pause";
-    audio.play();
-  } else {
-    play.innerHTML = "Play";
-    audio.pause();
-  }
+function playsong(){
+  track.play();
+  Playing_song = true;
+  play.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
 }
+
+function pausesong(){
+	track.pause();
+	Playing_song = false;
+	play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+}
+
+function next_song(){
+	if(index_no < All_song.length - 1){
+		index_no += 1;
+		load_track(index_no);
+		playsong();
+	}else{
+		index_no = 0;
+		load_track(index_no);
+		playsong();
+
+	}
+}
+
+function previous_song(){
+	if(index_no > 0){
+		index_no -= 1;
+		load_track(index_no);
+		playsong();
+
+	}else{
+		index_no = All_song.length;
+		load_track(index_no);
+		playsong();
+	}
+}
+
+function change_duration(){
+	slider_position = track.duration * (slider.value / 100);
+	track.currentTime = slider_position;
+}
+
+function range_slider(){
+	let position = 0;
+        
+        // update slider position
+		if(!isNaN(track.duration)){
+		   position = track.currentTime * (100 / track.duration);
+		   slider.value =  position;
+
+		   let currentMin = Math.floor(track.currentTime / 60);
+           let currentSec = Math.floor(track.currentTime - currentMin * 60);
+           let durationMin = Math.floor(track.duration / 60);
+           let durationSec = Math.floor(track.duration - durationMin * 60);
+
+           if (currentSec < 10) { currentSec = "0" + currentSec; }
+           if (durationSec < 10) { durationSec = "0" + durationSec; }
+           if (currentMin < 10) { currentMin = "0" + currentMin; }
+           if (durationMin < 10) { durationMin = "0" + durationMin; }
+
+		   curr_time.textContent = currentMin + ":" + currentSec;
+		   total_duration.textContent = durationMin + ":" + durationSec;
+	      }
+     }
+
