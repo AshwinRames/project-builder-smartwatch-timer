@@ -1,77 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <title>Smart Watch</title>
-  </head>
-
-  <body>
-    <section class="mainContainer">
-      <section class="leftContainer">
-        <div class="title">
-          <h1>SmartWatch</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartWatch Timer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>SMARTWATCH</h1>
+    <div class="SW">
+        <label id="firsttime"></label>
+        <div class="main">
+            <div id="stop-watch">
+                <h1 id="display"></h1>
+            </div>
+            <div class="interact">
+               <img src="./img/reset.png" alt="" onclick="reset()">
+               <img src="./img/start.png" alt="" onclick="start()">
+               <img src="./img/stop.png" alt="" onclick="stop()">
+            </div>
         </div>
-      </section>
-      <section class="rightContainer">
-        <div class="watch">
-          <h4 id="topTime" onclick="showWatch()"></h4>
-          <div class="display" id="display">
-            <div class="time" id="timeDisplay">
-              <h1 id="time"></h1>
-              <h5 id="day"></h5>
-            </div>
-            <div class="message" id="messageDisplay">
-              <button onclick="showJavaMsg()">Java</button>
-              <hr />
-              <button onclick="showHtmlMsg()">Html</button>
-              <hr />
-              <button onclick="showCssMsg()">Css</button>
-              <hr />
-            </div>
-            <div class="innermessage" id="innermessage"></div>
-            <div class="music" id="musicDisplay">
-              <div class="player">
-                <article>
-                  <img
-                    id="songimg"
-                    src="https://i.ytimg.com/vi/uHDO2aqY5mc/maxresdefault.jpg"
-                    onclick="playtrack()"
-                    alt=""
-                  />
-                </article>
-                <article>
-                  <p id="trackname">Evare</p>
-                  <audio id="player">
-                    <source src="assests/trip.mp3" type="" />
-                  </audio>
-                  <div class="play-pauseBtn">
-                    <button id="play-pause" onclick="playtrack()">Play</button>
-                  </div>
-                </article>
-              </div>
-
-              <div class="list">
-                <ul id="orderList"></ul>
-              </div>
-            </div>
-          </div>
-          <div class="buttons">
-            <button id="btnMessage" onclick="showMessage()">
-              <i class="fas fa-comments" id="message"></i>
-            </button>
-            <button id="btnMusic" onclick="playMusic()">
-              <i class="fas fa-music" id="music"></i>
-            </button>
-            <button id="btnClock">
-              <i class="far fa-clock" id="clock"></i>
-            </button>
-          </div>
+        <div class="imgs">
+            <img src="./img/chat.png" alt="">
+            <img src="./img/music.png" alt="">
+            <img src="./img/clk.png" alt="">
         </div>
-      </section>
-    </section>
+    </div>
     <script src="app.js"></script>
-  </body>
+</body>
 </html>
