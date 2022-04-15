@@ -1,3 +1,4 @@
+//time
 var everyday = new Date();
 var hrs = everyday.getHours();
 if(hrs<10){
@@ -10,151 +11,75 @@ if(min<10){
 var time = hrs + " : " + min;
 document.getElementById('firsttime').innerHTML = time;
 
-let previous = document.querySelector('#pre');
-let play = document.querySelector('#play');
-let next = document.querySelector('#next');
-let title = document.querySelector('#title');
-let slider = document.querySelector('#duration_slider');
-let curr_time = document.querySelector(".current_time");
-let total_duration = document.querySelector(".total_duration");
-let track_image = document.querySelector('#track_image');
-let present = document.querySelector('#present');
-let total = document.querySelector('#total');
-let artist = document.querySelector('#artist');
-
-let timer;
-let index_no = 0;
-let Playing_song = false;
-let track = document.createElement('audio');
-let All_song = [
-   {
-     name: "Doctor Theme",
-     path: "Doctor Theme.mp3",
-     img: "Doctor Theme.jpg",
-     singer: "Anirudh Ravichander"
-   },
-   {
-     name: "JD BadAss",
-     path: "JD Badass Theme.mp3",
-     img: "JD.jpg",
-     singer: "Anirudh"
-   },
-   {
-     name: "JD Intro",
-     path: "JD Intro.mp3",
-     img: "JD.jpg",
-     singer: "Arivu"
-   },
-   {
-     name: "Master The Blaster ",
-     path: "Master The Blaster.mp3",
-     img: "JD.jpg",
-     singer: "Bjourn Surrao"
-   },
-   {
-     name: "Rait Zara Si",
-     path: "Rait Zara Si.mp3",
-     img: "Rait Zara Si.jpg",
-     singer: "Arijit Singh"
-   }
-];
-
-function load_track(index_no){
-	clearInterval(timer);
-	reset_slider();
-
-	track.src = All_song[index_no].path;
-	title.innerHTML = All_song[index_no].name;	
-	track_image.src = All_song[index_no].img;
-    artist.innerHTML = All_song[index_no].singer;
-    track.load();
-
-	timer = setInterval(range_slider ,1000);
-	track.addEventListener("ended",next_song);
+var msec=0, sec=0, min=0, d=0, e=0, z=0;
+var check=true;
+var clear=0;
+var stopwatch=document.getElementById('display');
+stopwatch.innerHTML='00:00:00';
+function starts(){
+    msec=addZeroMsec(msec+1);
+    if(msec>99){
+        sec=addZeroSec(sec+1);
+        msec=addZeroMsec(0);
+    }
+    if(sec>59){
+        sec=addZeroSec(0);
+        msec=addZeroMsec(0);
+        min=addZeroMin(min+1);
+    }
+    stopwatch.innerHTML=''+z+min+':'+e+sec+':'+d+msec;
 }
 
-load_track(index_no);
-
- function justplay(){
- 	if(Playing_song==false){
- 		playsong();
-
- 	}else{
- 		pausesong();
- 	}
- }
-
-
-// reset song slider
- function reset_slider(){
-		curr_time.textContent = "00:00";
-		total_duration.textContent = "00:00";
- 	    slider.value = 0;
- }
-
-function playsong(){
-  track.play();
-  Playing_song = true;
-  play.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
+function start(){
+    if(check===true){
+        check=false;
+        clear=setInterval(starts,10);
+    }
 }
 
-function pausesong(){
-	track.pause();
-	Playing_song = false;
-	play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+function stop(){
+    check=true;
+    clearInterval(clear);
 }
 
-function next_song(){
-	if(index_no < All_song.length - 1){
-		index_no += 1;
-		load_track(index_no);
-		playsong();
-	}else{
-		index_no = 0;
-		load_track(index_no);
-		playsong();
-
-	}
+function reset(){
+    msec=0;
+    sec=0;
+    min=0;
+    check=true;
+    clearInterval(clear);
+    stopwatch.innerHTML='00:00:00';
 }
 
-function previous_song(){
-	if(index_no > 0){
-		index_no -= 1;
-		load_track(index_no);
-		playsong();
-
-	}else{
-		index_no = All_song.length;
-		load_track(index_no);
-		playsong();
-	}
+function addZeroMsec(time){
+    var length= time.toString().length;
+    if(length<2){
+        d=0;
+    }
+    else{
+        d='';
+    }
+    return time;
 }
 
-function change_duration(){
-	slider_position = track.duration * (slider.value / 100);
-	track.currentTime = slider_position;
+function addZeroSec(time){
+    var length=time.toString().length;
+    if(length<2){
+        e=0;
+    }
+    else{
+        e='';
+    }
+    return time;
 }
 
-function range_slider(){
-	let position = 0;
-        
-        // update slider position
-		if(!isNaN(track.duration)){
-		   position = track.currentTime * (100 / track.duration);
-		   slider.value =  position;
-
-		   let currentMin = Math.floor(track.currentTime / 60);
-           let currentSec = Math.floor(track.currentTime - currentMin * 60);
-           let durationMin = Math.floor(track.duration / 60);
-           let durationSec = Math.floor(track.duration - durationMin * 60);
-
-           if (currentSec < 10) { currentSec = "0" + currentSec; }
-           if (durationSec < 10) { durationSec = "0" + durationSec; }
-           if (currentMin < 10) { currentMin = "0" + currentMin; }
-           if (durationMin < 10) { durationMin = "0" + durationMin; }
-
-		   curr_time.textContent = currentMin + ":" + currentSec;
-		   total_duration.textContent = durationMin + ":" + durationSec;
-	      }
-     }
-
+function addZeroMin(time){
+    var length=time.toString().length;
+    if(length<2){
+        z=0;
+    }
+    else{
+        z='';
+    }
+    return time;
+}
